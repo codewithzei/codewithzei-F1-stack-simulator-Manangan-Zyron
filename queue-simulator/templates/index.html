@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Queue Simulator{% endblock %}
+
+{% block content %}
+<h1>Queue Data Structure Simulator</h1>
+<p>A queue uses <strong>FIFO</strong> (First In, First Out): the first value added is the first value removed.</p>
+<p>Queue size: <strong>{{ size }}</strong></p>
+<div class="row simulator">
+  <section class="col-md-4 operations">
+    <h2>Operations</h2>
+    <form action="{{ url_for('operate') }}" method="POST">
+      <label for="qu_data">Data (1 to 24 characters)</label>
+      <input id="qu_data" name="value" maxlength="24" class="form-control mb-2" autocomplete="off">
+      <div class="d-grid gap-2">
+        <button type="submit" id="btn_enqueue" name="action" value="enqueue" class="btn btn-success">Enqueue</button>
+        <button type="submit" id="btn_dequeue" name="action" value="dequeue" class="btn btn-danger">Dequeue</button>
+        <button type="submit" id="btn_peek" name="action" value="peek" class="btn btn-warning">Peek</button>
+        <button type="submit" id="btn_clear" name="action" value="clear" class="btn btn-light">Clear</button>
+      </div>
+    </form>
+  </section>
+  <section id="queue" class="col-md-4 stack-area queue-area">
+    <h2>Queue data</h2>
+    <p class="structure-note">Front is shown first. Rear is at the bottom.</p>
+    {% if items %}
+      {% for item in items %}
+        <div class="stack-item{% if highlight and loop.first %} peek{% endif %}"{% if highlight and loop.first %} id="peeked-item"{% endif %}>{{ item }}{% if loop.first and loop.last %}<small>FRONT / REAR</small>{% elif loop.first %}<small>FRONT</small>{% elif loop.last %}<small>REAR</small>{% endif %}</div>
+      {% endfor %}
+    {% else %}
+      <p class="empty-state">The queue is empty.</p>
+    {% endif %}
+  </section>
+  <section id="removed" class="col-md-4 popped-area">
+    <h2>Removed from queue</h2>
+    {% if removed %}
+      {% for item in removed %}
+        <div class="stack-item removed">{{ item }}</div>
+      {% endfor %}
+    {% else %}
+      <p class="empty-state">No items have been removed.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
